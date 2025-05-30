@@ -1,0 +1,10 @@
+# ================================
+# ChemGPT Spectroscopy Microservice
+# ================================
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+numpy==1.24.3         # For calculations
+matplotlib==3.8.3     # For plotting spectra (optional)
+rdkit-pypi==2022.9.5  # If you want molecular calculations (optional)
+python-dotenv==1.0.0
