@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI(
     title="ChemGPT Spectroscopy Microservice",
@@ -19,11 +20,13 @@ app.add_middleware(
 def read_root():
     return {"status": "ok", "service": "chemgpt-spectro", "message": "Spectroscopy microservice is alive!"}
 
+# Define the request body model
+class MoleculeRequest(BaseModel):
+    molecule: str
+
 @app.post("/spectroscopy")
-async def spectroscopy_endpoint(request: Request):
-    body = await request.json()
-    # Example: expects {"molecule": "benzene"} or similar
-    molecule = body.get("molecule", "")
+async def spectroscopy_endpoint(data: MoleculeRequest):
+    molecule = data.molecule
     # Placeholder response (replace with real spectra logic)
     return {
         "molecule": molecule,
