@@ -37,13 +37,19 @@ async def spectroscopy_endpoint(data: MoleculeRequest):
 
     # Build GPT-4o prompt for spectra
     prompt = (
-        f"You are a chemistry assistant. For the molecule '{molecule}', "
-        "provide both the IR and UV-Vis spectra as markdown tables with typical experimental or literature values. "
-        "If you don't have data, say 'Not available.' "
-        "IR table: wavenumber (cm⁻¹), intensity, assignment. "
-        "UV table: wavelength (nm), intensity, electronic transition type. "
-        "Only give the tables, no intro."
-    )
+    f"You are a world-class chemistry assistant and spectral database. "
+    f"For the molecule '{molecule}', provide the following as comprehensively as possible, using markdown: \n\n"
+    "1. **Infrared (IR) Spectrum Table**: For each main peak, give: wavenumber (cm⁻¹), intensity, assignment (functional group or bond type), and a brief note if relevant. "
+    "Add as many peaks as possible from known literature/experimental data.\n\n"
+    "2. **UV-Visible (UV-Vis) Spectrum Table**: For each peak, give: wavelength (nm), intensity, transition type (e.g., π→π*, n→π*), and a note if available. "
+    "List all significant peaks.\n\n"
+    "3. **NMR Spectra Tables (¹H and ¹³C)**: For each, give: chemical shift (δ, ppm), multiplicity (s, d, t, q, m), coupling constant (J, Hz) if known, assignment (proton or carbon type), and integration if possible. "
+    "Add all signals typically observed for this molecule.\n\n"
+    "4. **Summary of Key Features**: Briefly interpret the spectra—mention characteristic signals or peaks, functional groups identified, and what a chemist can deduce.\n\n"
+    "5. **References**: If possible, cite databases or literature sources (e.g., NIST, SDBS, PubChem, Spectral Database for Organic Compounds).\n\n"
+    "Return only markdown tables (one for each spectrum), and summary/reference sections as bullet points. "
+    "Be as complete and accurate as possible, but if data is missing for any part, clearly state 'Not available'."
+)
 
     try:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
